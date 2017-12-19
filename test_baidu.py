@@ -3,13 +3,15 @@ import time
 import unittest
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from utils.config import Config,DRIVER_PATH
+from utils.log import logger
 
+# print(DRIVER_PATH)
 class TestBaiDu(unittest.TestCase):
-    URL = 'http://www.baidu.com'
+    URL = Config().get('URL')
     on_path = os.path.dirname(os.path.abspath(__file__))
     src_path = os.path.dirname(on_path)
     base_path = os.path.dirname(src_path)
-    driver_path = os.path.abspath(base_path+'/drivers/chromedriver')
 
 
     to_kw = (By.ID,'kw')
@@ -18,29 +20,22 @@ class TestBaiDu(unittest.TestCase):
 
 
     def setUp(self):
-        self.driver = webdriver.Chrome(executable_path=self.driver_path)
+        self.driver = webdriver.Chrome(executable_path=DRIVER_PATH+'/chromedriver')
         self.driver.get(self.URL)
 
     def tearDown(self):
         self.driver.quit()
 
     def test_search_0(self):
-        print(self.to_kw)
         self.driver.find_element(*self.to_kw).send_keys('天气预报')
         self.driver.find_element(*self.to_su).click()
         time.sleep(2)
         links = self.driver.find_elements(*self.result)
         for link in links:
-            print(link.text)
+            # print(link.text)
+            logger.info(link.text)
 
 
-    def test_search_1(self):
-        self.driver.find_element(*self.to_kw).send_keys('Python selenium')
-        self.driver.find_element(*self.to_su).click()
-        time.sleep(2)
-        links = self.driver.find_elements(*self.result)
-        for link in links:
-            print(link.text)
 
 if __name__ == '__main__':
     unittest.main()
