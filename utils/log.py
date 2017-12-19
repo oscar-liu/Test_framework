@@ -1,22 +1,25 @@
 import logging
 from logging.handlers import TimedRotatingFileHandler
 from .config import LOG_PATH
+from utils.config import LOG_PATH,Config
 
 
 class Logger(object):
 
-    def __init__(self,logger_name = 'framework'):
+    def __init__(self,logger_name = 'framework2'):
         self.logger = logging.getLogger(logger_name)
         logging.root.setLevel(logging.NOTSET)
-        self.log_file_name = 'test.log'
-        self.backup_count = 5
+        c = Config().get('log')
+        self.log_file_name = c.get('file_name') if c and c.get('file_name') else  'test.log' #日志文件
+        self.backup_count = c.get('backup_count') if c and c.get('backup_count') else 5
 
         #日志输出级别
-        self.console_output_level = 'WARNING'
-        self.file_output_level = 'DEBUG'
+        self.console_output_level = c.get('console_level') if c and c.get('console_level') else 'WARNING'
+        self.file_output_level = c.get('file_level') if c and c.get('file_level') else 'DEBUG'
 
         # 日志输出格式
-        self.formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        pattern = c.get('pattern') if c and c.get('pattern') else '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        self.formatter = logging.Formatter(pattern)
 
     def get_logger(self):
         """在logger中添加日志句柄并返回，如果logger已有句柄，则直接返回"""
