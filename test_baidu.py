@@ -3,9 +3,10 @@ import time
 import unittest
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from utils.config import Config,DRIVER_PATH,DATA_PATH
+from utils.config import Config,DRIVER_PATH,DATA_PATH,REPORT_PATH
 from utils.log import logger
 from utils.file_read import ExcelReader
+from utils.HTMLTestRunner_PY3 import HTMLTestRunner
 
 # print(DRIVER_PATH)
 class TestBaiDu(unittest.TestCase):
@@ -69,4 +70,10 @@ class TestBaiDu(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    #报告
+    report = REPORT_PATH + '/report.html'
+    with open(report, 'wb') as f:
+        runner = HTMLTestRunner(f , verbosity=2, title = "测试框架构建学习", description="HTML报告" )
+        runner.run(TestBaiDu('test_excel_read_search'))
+
+    #unittest.main()
