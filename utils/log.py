@@ -1,7 +1,7 @@
 import logging
 from logging.handlers import TimedRotatingFileHandler
 from .config import LOG_PATH
-from utils.config import LOG_PATH,Config
+from .config import LOG_PATH,Config
 
 
 class Logger(object):
